@@ -2,7 +2,10 @@
 
 Network monitoring tool for React Native - Terminal UI similar to browser DevTools.
 
-![Terminal UI](https://img.shields.io/badge/Terminal-UI-blue)
+![npm version](https://img.shields.io/npm/v/react-native-network-activity)
+![npm downloads](https://img.shields.io/npm/dm/react-native-network-activity)
+![License](https://img.shields.io/npm/l/react-native-network-activity)
+![CI](https://github.com/vrush-123/react-native-network-activity/workflows/CI/badge.svg)
 ![React Native](https://img.shields.io/badge/React%20Native-0.70+-green)
 ![Node](https://img.shields.io/badge/Node-18+-orange)
 

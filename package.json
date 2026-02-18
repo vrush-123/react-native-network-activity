@@ -16,7 +16,8 @@
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
     "react-native": ">=0.70.0"
