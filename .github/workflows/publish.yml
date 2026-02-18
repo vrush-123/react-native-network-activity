@@ -15,6 +15,9 @@ on:
           - minor
           - major
 
+env:
+  NODE_VERSION: '20.x'
+
 jobs:
   publish:
     name: Publish Package
@@ -32,7 +35,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
@@ -47,25 +50,48 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Bump version (if workflow_dispatch)
-        if: github.event_name == 'workflow_dispatch'
+      - name: Get version and tag
+        id: version
         run: |
-          npm version ${{ github.event.inputs.version }} -m "Bump version to %s [skip ci]"
-          git push origin main --follow-tags
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            # Bump version for manual dispatch
+            npm version ${{ github.event.inputs.version }} -m "Bump version to %s [skip ci]"
+            git push origin main --follow-tags
+          elif [ "${{ github.event_name }}" == "release" ]; then
+            # For release events, use the tag from the release
+            TAG_NAME="${{ github.event.release.tag_name }}"
+            # Remove 'v' prefix if present to get version
+            VERSION="${TAG_NAME#v}"
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+            echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          # Get version from package.json
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v$VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
 
       - name: Publish to npm
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Create Git Tag (if workflow_dispatch and tag doesn't exist)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          if ! git rev-parse "$TAG" >/dev/null 2>&1; then
+            git tag -a "$TAG" -m "Release $TAG"
+            git push origin "$TAG"
+          fi
+
       - name: Create GitHub Release (if workflow_dispatch)
         if: github.event_name == 'workflow_dispatch'
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: v$(node -p "require('./package.json').version")
-          release_name: Release v$(node -p "require('./package.json').version")
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Release ${{ steps.version.outputs.tag }}
           body: |
             ## Changes
             
@@ -74,7 +100,9 @@ jobs:
             ## Installation
             
             ```bash
-            npm install react-native-network-activity@$(node -p "require('./package.json').version")
+            npm install react-native-network-activity@${{ steps.version.outputs.version }}
             ```
           draft: false
           prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
