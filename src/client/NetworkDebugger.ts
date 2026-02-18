@@ -5,7 +5,7 @@
  *
  * @example
  * // In your React Native app (App.tsx or index.js)
- * import { NetworkDebugger } from 'react-native-network-monitor';
+ * import { NetworkDebugger } from 'react-native-network-activity';
  *
  * if (__DEV__) {
  *   NetworkDebugger.enableRemote();

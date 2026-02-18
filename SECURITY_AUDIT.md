@@ -1,5 +1,5 @@
 # Security Audit Report
-**Package:** react-native-network-monitor  
+**Package:** react-native-network-activity  
 **Date:** 2024  
 **Status:** ✅ **SAFE TO PUBLISH**
 

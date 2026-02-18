@@ -1,4 +1,4 @@
-# react-native-network-monitor
+# react-native-network-activity
 
 Network monitoring tool for React Native - Terminal UI similar to browser DevTools.
 
@@ -19,9 +19,9 @@ Network monitoring tool for React Native - Terminal UI similar to browser DevToo
 ## Installation
 
 ```bash
-npm install react-native-network-monitor
+npm install react-native-network-activity
 # or
-yarn add react-native-network-monitor
+yarn add react-native-network-activity
 ```
 
 ## Quick Start
@@ -29,14 +29,14 @@ yarn add react-native-network-monitor
 ### 1. Start the Terminal Monitor
 
 ```bash
-npx react-native-network-monitor
+npx react-native-network-activity
 ```
 
 ### 2. Add to Your React Native App
 
 ```typescript
 // App.tsx or index.js
-import { NetworkDebugger } from 'react-native-network-monitor';
+import { NetworkDebugger } from 'react-native-network-activity';
 
 // Enable only in development
 if (__DEV__) {
@@ -52,13 +52,13 @@ That's it! Network requests will now appear in your terminal.
 
 ```bash
 # Start with default port (8973)
-npx react-native-network-monitor
+npx react-native-network-activity
 
 # Use a custom port
-npx react-native-network-monitor --port 9000
+npx react-native-network-activity --port 9000
 
 # Show help
-npx react-native-network-monitor --help
+npx react-native-network-activity --help
 ```
 
 ### Keyboard Shortcuts
@@ -76,7 +76,7 @@ npx react-native-network-monitor --help
 ### Client API
 
 ```typescript
-import { NetworkDebugger } from 'react-native-network-monitor';
+import { NetworkDebugger } from 'react-native-network-activity';
 
 // Enable remote monitoring (recommended)
 NetworkDebugger.enableRemote();
@@ -176,7 +176,7 @@ Both your computer and device must be on the same network. The default port is `
 
 ```bash
 # Use a different port
-npx react-native-network-monitor --port 9000
+npx react-native-network-activity --port 9000
 
 # And in your app
 NetworkDebugger.enableRemote('localhost', 9000);
@@ -198,7 +198,7 @@ import {
   NetworkRequest,
   NetworkDebuggerOptions,
   enableRemoteNetworkMonitor,
-} from 'react-native-network-monitor';
+} from 'react-native-network-activity';
 ```
 
 ## Security Considerations

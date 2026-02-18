@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
- * react-native-network-monitor CLI
+ * react-native-network-activity CLI
  *
  * Terminal UI for monitoring React Native network requests
  *
  * Usage:
- *   npx react-native-network-monitor
- *   npx react-native-network-monitor --port 9000
- *   npx react-native-network-monitor --help
+ *   npx react-native-network-activity
+ *   npx react-native-network-activity --port 9000
+ *   npx react-native-network-activity --help
  */
 
 const WebSocket = require('ws');
@@ -25,17 +25,17 @@ function isValidPort(port) {
 for (let i = 0; i < args.length; i++) {
   if (args[i] === '--help' || args[i] === '-h') {
     console.log(`
-react-native-network-monitor - Network monitoring for React Native
+react-native-network-activity - Network monitoring for React Native
 
 Usage:
-  npx react-native-network-monitor [options]
+  npx react-native-network-activity [options]
 
 Options:
   -p, --port <port>  Port to listen on (default: 8973, range: 1-65535)
   -h, --help         Show this help message
 
 Setup in your React Native app:
-  import { NetworkDebugger } from 'react-native-network-monitor';
+  import { NetworkDebugger } from 'react-native-network-activity';
 
   if (__DEV__) {
     NetworkDebugger.enableRemote();
@@ -148,7 +148,7 @@ function getTerminalSize() {
 // Draw header
 function drawHeader() {
   const { width } = getTerminalSize();
-  const title = ' react-native-network-monitor ';
+  const title = ' react-native-network-activity ';
   const padding = Math.max(0, Math.floor((width - title.length) / 2));
 
   console.log(colors.bgBlue + colors.white + colors.bright);
@@ -603,14 +603,14 @@ function setupInput() {
 // Main
 function main() {
   console.log(`
-${colors.cyan}react-native-network-monitor${colors.reset}
+${colors.cyan}react-native-network-activity${colors.reset}
 ${colors.dim}────────────────────${colors.reset}
 
 Starting WebSocket server on port ${PORT}...
 Waiting for connections from your React Native app...
 
 ${colors.bright}Setup in your app:${colors.reset}
-  import { NetworkDebugger } from 'react-native-network-monitor';
+  import { NetworkDebugger } from 'react-native-network-activity';
   NetworkDebugger.enableRemote();
 
 ${colors.dim}Press any key to show the monitor UI...${colors.reset}
