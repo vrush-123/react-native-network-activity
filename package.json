@@ -49,14 +49,14 @@
     "terminal",
     "cli"
   ],
-  "author": "",
+  "author": "vrush-123",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/vrush-123/react-native-network-monitor.git"
   },
   "bugs": {
-    "url": ""
+    "url": "https://github.com/vrush-123/react-native-network-monitor/issues"
   },
-  "homepage": ""
+  "homepage": "https://github.com/vrush-123/react-native-network-monitor#readme"
 }
