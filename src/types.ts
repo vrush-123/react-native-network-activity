@@ -86,3 +86,25 @@ export const DEFAULT_OPTIONS: NetworkDebuggerOptions = {
  * Default WebSocket port for monitor communication
  */
 export const DEFAULT_MONITOR_PORT = 8973;
+
+/**
+ * Extended global interface for React Native environment
+ */
+export interface GlobalWithFetch {
+  fetch: typeof fetch;
+  __DEV__?: boolean;
+}
+
+/**
+ * Extended XMLHttpRequest with debugger metadata
+ */
+export interface XMLHttpRequestWithDebugger extends XMLHttpRequest {
+  _networkDebugger?: {
+    id: string;
+    method: string;
+    url: string;
+    headers: Record<string, string>;
+    startTime: number;
+    body?: Document | XMLHttpRequestBodyInit | null;
+  };
+}

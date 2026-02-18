@@ -18,7 +18,14 @@ import {
   DEFAULT_OPTIONS,
   DEFAULT_MONITOR_PORT,
   MonitorMessage,
+  GlobalWithFetch,
+  XMLHttpRequestWithDebugger,
 } from '../types';
+
+// Type-safe global access
+const getGlobal = (): GlobalWithFetch => {
+  return global as unknown as GlobalWithFetch;
+};
 
 // Try to get Platform from react-native, but don't fail if not available
 let Platform: { OS: string } | null = null;
@@ -61,7 +68,7 @@ class NetworkDebuggerClass {
     if (!this.enabled) return;
 
     if (this.originalFetch) {
-      (global as any).fetch = this.originalFetch;
+      getGlobal().fetch = this.originalFetch;
       this.originalFetch = null;
     }
 
@@ -122,7 +129,8 @@ class NetworkDebuggerClass {
 
     // Security warning for production use
     // Note: __DEV__ is a React Native global, check if it exists and is false
-    if (typeof (global as any).__DEV__ !== 'undefined' && !(global as any).__DEV__) {
+    const globalObj = getGlobal();
+    if (typeof globalObj.__DEV__ !== 'undefined' && !globalObj.__DEV__) {
       console.warn(
         '[NetworkDebugger] WARNING: Network monitoring should only be enabled in development mode. ' +
           'Disabling remote monitoring to prevent security risks.',
@@ -225,7 +233,8 @@ class NetworkDebuggerClass {
     } catch (error) {
       // Send failed - silently fail to avoid disrupting app
       // Only log in development mode if __DEV__ is available
-      if (typeof (global as any).__DEV__ !== 'undefined' && (global as any).__DEV__) {
+      const globalObj = getGlobal();
+      if (typeof globalObj.__DEV__ !== 'undefined' && globalObj.__DEV__) {
         console.warn('[NetworkDebugger] Failed to send message to monitor:', error);
       }
     }
@@ -269,7 +278,7 @@ class NetworkDebuggerClass {
     return body;
   }
 
-  private parseBody(body: any): string {
+  private parseBody(body: unknown): string {
     if (!body) return '[empty]';
     if (typeof body === 'string') {
       try {
@@ -376,10 +385,11 @@ class NetworkDebuggerClass {
   }
 
   private interceptFetch(): void {
-    this.originalFetch = (global as any).fetch;
+    const globalObj = getGlobal();
+    this.originalFetch = globalObj.fetch;
     const self = this;
 
-    (global as any).fetch = async function (
+    globalObj.fetch = async function (
       input: RequestInfo | URL,
       init?: RequestInit,
     ): Promise<Response> {
@@ -477,7 +487,8 @@ class NetworkDebuggerClass {
       password?: string | null,
     ): void {
       const urlStr = typeof url === 'string' ? url : url.href;
-      (this as any)._networkDebugger = {
+      const xhr = this as unknown as XMLHttpRequestWithDebugger;
+      xhr._networkDebugger = {
         id: self.generateId(),
         method: method.toUpperCase(),
         url: urlStr,
@@ -491,14 +502,16 @@ class NetworkDebuggerClass {
       name: string,
       value: string,
     ): void {
-      if ((this as any)._networkDebugger) {
-        (this as any)._networkDebugger.headers[name] = value;
+      const xhr = this as unknown as XMLHttpRequestWithDebugger;
+      if (xhr._networkDebugger) {
+        xhr._networkDebugger.headers[name] = value;
       }
       return originalSetRequestHeader.call(this, name, value);
     };
 
     XMLHttpRequest.prototype.send = function (body?: Document | XMLHttpRequestBodyInit | null): void {
-      const debugInfo = (this as any)._networkDebugger;
+      const xhr = this as unknown as XMLHttpRequestWithDebugger;
+      const debugInfo = xhr._networkDebugger;
 
       if (!debugInfo || !self.shouldLog(debugInfo.url)) {
         return originalSend.call(this, body);
