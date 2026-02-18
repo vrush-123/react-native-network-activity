@@ -1,6 +1,6 @@
 {
   "name": "react-native-network-activity",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Network monitoring tool for React Native - Terminal UI similar to browser DevTools",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
