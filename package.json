@@ -1,0 +1,62 @@
+{
+  "name": "react-native-network-monitor",
+  "version": "1.0.0",
+  "description": "Network monitoring tool for React Native - Terminal UI similar to browser DevTools",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "react-native-network-monitor": "./bin/monitor.js"
+  },
+  "files": [
+    "dist",
+    "bin",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.70.0"
+  },
+  "peerDependenciesMeta": {
+    "react-native": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "ws": "^8.19.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "@types/ws": "^8.5.10",
+    "@types/node": "^20.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "react-native",
+    "network",
+    "debugging",
+    "monitor",
+    "devtools",
+    "fetch",
+    "xhr",
+    "http",
+    "terminal",
+    "cli"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": {
+    "url": ""
+  },
+  "homepage": ""
+}
